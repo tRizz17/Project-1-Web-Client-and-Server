@@ -9,12 +9,14 @@ def HTTP_Request(url, port):
     request = f"GET / HTTP/1.1\r\nHost:{url}\r\nConnection: close\r\n\r\n"
     request = request.encode("ISO-8859-1")
     s.sendall(request)
+    buffer = ""
     while True:
         data = s.recv(4096)
         if len(data) == 0:
             break
-        response = data.decode("ISO-8859-1")
-        print(response)
+        data = data.decode("ISO-8859-1")
+        buffer += data
+        print(buffer)
     s.close()
 
 parser = argparse.ArgumentParser(description="Specify URL and port number if you wish")
@@ -24,9 +26,3 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
     HTTP_Request(args.url, args.port)
-
-
-# This needs to run with 'python3 webclient.py example.com'
-# ALSO: you need to be able specify a port number to connect to on the command line. This defaults to port 80 if not specified. So you could connect to a webserver on a different port like so:
-
-# $ python webclient.py example.com 8088
