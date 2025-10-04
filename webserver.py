@@ -5,16 +5,23 @@ def WebServer(port):
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     s.bind(('', port))
+    s.listen()
     while True:
-        s.listen()
         print("Listening for incoming connections... ")
-        new_conn = s.accept()
+        new_conn= s.accept()
+        client_addr = new_conn[1][0]
+        print(f"Client's IP Address: {client_addr}")
         new_socket = new_conn[0]
-        data = new_socket.recv(1024).decode("ISO-8859-1")
-        print(data)
-        response = 'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 6\r\nConnection: close\r\n\r\nHello!\r\n\r\n'
-        new_socket.sendall(response.encode("ISO-8859-1"))
-        new_socket.close()
+        buffer = ""
+        while True:
+            request_data = new_socket.recv(1024).decode("ISO-8859-1")
+            buffer += request_data
+            if "\r\n\r\n" in buffer:
+                print(buffer)
+                response = 'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 6\r\nConnection: close\r\n\r\nHello!\r\n\r\n'
+                new_socket.sendall(response.encode("ISO-8859-1"))
+                new_socket.close()
+                break
 
 parser = argparse.ArgumentParser(description="Specify a port number if you wish")
 parser.add_argument("port", nargs="?", type=int, default=28333, help="Enter a valid port number")
