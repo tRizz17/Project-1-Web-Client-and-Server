@@ -7,7 +7,7 @@ def WebServer(port):
     s.bind(('', port))
     s.listen()
     while True:
-        print("Listening for incoming connections... ")
+        print("Listening for incoming connections... \r\n")
         new_conn= s.accept()
         client_addr = new_conn[1][0]
         print(f"Client's IP Address: {client_addr}")

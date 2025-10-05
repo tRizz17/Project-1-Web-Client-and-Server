@@ -2,7 +2,7 @@ import socket
 import argparse
 
 
-def HTTP_Request(url, port):
+def WebClient(url, port):
     s = socket.socket()
     server = (url, port)
     s.connect(server)
@@ -25,4 +25,4 @@ parser.add_argument("port", nargs="?", type = int, default=80, help="Enter a val
 args = parser.parse_args()
 
 if __name__ == "__main__":
-    HTTP_Request(args.url, args.port)
+    WebClient(args.url, args.port)
